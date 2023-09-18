@@ -9,15 +9,19 @@ const createRequest = (options = {}) => {
         let url = options.url;
 
         if (options.method !== "GET") {
-            Object.entries(options.data).forEach(
-                ([key, value]) => formData.append(key, value));
+            if (options.data && typeof options.data === 'object') {
+                Object.entries(options.data).forEach(
+                    ([key, value]) => formData.append(key, value));
+            }
         } else {
             formData = "";
             if (!url.includes("/account")) {
-                url += "?";
-                Object.entries(options.data).forEach(
-                    ([key, value]) => (url += `${key}=${value}&`));
-                url = url.slice(0, -1);
+                if (options.data && typeof options.data === 'object') {
+                    url += "?";
+                    Object.entries(options.data).forEach(
+                        ([key, value]) => (url += `${key}=${value}&`));
+                    url = url.slice(0, -1);
+                }
             }
         }
 
